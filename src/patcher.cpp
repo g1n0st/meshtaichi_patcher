@@ -419,6 +419,7 @@ void Patcher::build_patches(std::unordered_set<MeshElementType, MEHash> eles,
     auto from_type = MeshElementType(from_end_element_order(rel));
     auto to_type =  MeshElementType(to_end_element_order(rel));
     auto & XX = mesh->make_rel(rel);
+    int max_value_per_patch = 0, tmp = 0;
     std::vector<int> value, patch_offset, offset;
     for (int p = 0; p < num_seeds; ++p) {
       auto &pi = patches_info[p];
@@ -451,12 +452,14 @@ void Patcher::build_patches(std::unordered_set<MeshElementType, MEHash> eles,
           offset.push_back(value.size() - patch_offset.back());
         }
       }
+      max_value_per_patch = std::max(max_value_per_patch, int(value.size() - tmp));
+      tmp = value.size();
     }
 
     if (int(from_type) <= int(to_type)) {
-      local_rels.insert(std::make_pair(rel, LocalRel(std::move(value), std::move(patch_offset), std::move(offset))));
+      local_rels.insert(std::make_pair(rel, LocalRel(std::move(value), std::move(patch_offset), std::move(offset), max_value_per_patch)));
     } else {
-      local_rels.insert(std::make_pair(rel, LocalRel(std::move(value))));
+      local_rels.insert(std::make_pair(rel, LocalRel(std::move(value), max_value_per_patch)));
     }
   }
 

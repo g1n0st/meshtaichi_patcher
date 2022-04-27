@@ -77,15 +77,19 @@ class Patcher {
   struct LocalRel {
     LocalRel(std::vector<int> && value_, 
              std::vector<int> && patch_offset_, 
-             std::vector<int> && offset_)
-        : value(value_), patch_offset(patch_offset_), offset(offset_) {
+             std::vector<int> && offset_,
+             int max_value_per_patch_)
+        : value(value_), patch_offset(patch_offset_), offset(offset_), max_value_per_patch(max_value_per_patch_) {
       fixed = false;
+      assert(max_value_per_patch > 0);
     }
 
-    LocalRel(std::vector<int> &&value_) : value(value_) {
+    LocalRel(std::vector<int> &&value_, int max_value_per_patch_) : value(value_), max_value_per_patch(max_value_per_patch_) {
       fixed = true;
+      assert(max_value_per_patch > 0);
     }
 
+    int max_value_per_patch;
     bool fixed;
     std::vector<int> value;
     std::vector<int> patch_offset;

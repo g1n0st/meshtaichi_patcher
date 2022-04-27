@@ -116,6 +116,11 @@ PYBIND11_MODULE(meshtaichi_patcher_core, m) {
             if (name == "patch_offset") return vector2np(local_rel.patch_offset);
             if (name == "offset") return vector2np(local_rel.offset);
         })
+        .def("get_relation_max_value_per_patch", [](MeshTaichi::Patcher *patcher, int order) {
+            using RT = MeshTaichi::MeshRelationType;
+            auto local_rel = patcher->local_rels.find(RT(order))->second;
+            return local_rel.max_value_per_patch;
+        })
         .def("get_mesh_x", [](MeshTaichi::Patcher *patcher){
             //return py::to_pyarray(patcher->mesh->verts);
             std::vector<float> ans;

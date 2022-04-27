@@ -16,6 +16,7 @@ def mesh2meta(filename, relations):
         from_order = relation["from_order"]
         to_order = relation["to_order"]
         relation["value"] = patcher.get_relation_arr("value", from_order * 4 + to_order)
+        relation["max_value_per_patch"] = patcher.get_relation_max_value_per_patch(from_order * 4 + to_order)
         if from_order <= to_order:
             relation["patch_offset"] = patcher.get_relation_arr("patch_offset", from_order * 4 + to_order)
             relation["offset"] = patcher.get_relation_arr("offset", from_order * 4 + to_order)
